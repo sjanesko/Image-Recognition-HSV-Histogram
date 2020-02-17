@@ -1,4 +1,3 @@
-from keras.datasets import cifar10
 from matplotlib import pyplot as plt
 import cv2
 import numpy as np
@@ -7,11 +6,25 @@ import scipy
 from cv2.cv2 import calcHist
 import sys
 from scipy.spatial import distance
+import pickle
 
 # print entire np array 
 np.set_printoptions(threshold=sys.maxsize)
 
-(trainX, trainXy), (testX, testY) = cifar10.load_data()
+# load keras data
+#(trainX, trainXy), (testX, testY) = cifar10.load_data()
+
+# load batches
+def unpickle(batch):
+    with open('cifar-10-batches/data_batch_' + str(batch), 'rb') as file:
+        batch = pickle.load(file, encoding='latin1')
+
+    images = batch['data'].reshape((len(batch['data']), 3, 32, 32)).transpose(0, 2, 3, 1)
+    labels = batch['labels']
+    return images, labels
+
+def loadLabelNames():
+    return ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
 def hsvHist(image):
     # convert to HSV
@@ -52,11 +65,11 @@ def hsvHist(image):
     # return flattened arr
     return np.hstack([chanH, chanS, chanV])
 
+images, labels = unpickle(2)
 
-hist = hsvHist(trainX[2])
-hist2 = hsvHist(trainX[3])
+# truncate data so sample size for each class is > 100 and < 150
+images = images[:1200]
+labels = labels[:1200]
 
-# return distance 
-d = distance.euclidean(hist, hist2)
-
-print(d)
+for i in range (10):
+    print(labels.count(i))
