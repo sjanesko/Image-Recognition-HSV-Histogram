@@ -117,7 +117,7 @@ for i, image1 in enumerate(data):
 # sort distance array
 for i, arr in enumerate(distanceArr):
     arr.sort(key = lambda x: x[0])
-
+100
 print(distanceArr[0][0:11])
 
 plt.imshow(data[0][0])
