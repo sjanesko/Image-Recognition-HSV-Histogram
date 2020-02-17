@@ -88,25 +88,27 @@ def getHSVDistance(img1idx, img2idx, t):
 images, labels = unpickle(2)
 labelNames = loadLabelNames()
 
+sampleSize = 100
+
 # truncate data so sample size for each class is greater than 100 and less than 150
-images = images[:1200]
-labels = labels[:1200]
+images = images[:5000]
+labels = labels[:5000]
 
 # make easier structure to work with "(image, label)"
 data = list(zip(images, labels))
 
 # take the 100 random elements
 random.shuffle(data)
-data = data[:100]
+data = data[:sampleSize]
 
-histArr = [0] * 100
+histArr = [0] * sampleSize
 
 # compute histogram for every image
 for i, image in enumerate(data):
     histArr[i] = hsvHist(image[0])
 
 # create distance arr "(distance, index)"
-distanceArr = [[0 for x in range(100)] for y in range(100)] 
+distanceArr = [[0 for x in range(sampleSize)] for y in range(sampleSize)] 
 
 for i, image1 in enumerate(data):
     for j, image2 in enumerate(data):
